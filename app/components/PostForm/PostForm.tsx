@@ -1,3 +1,4 @@
+import { Button } from '../Button'
 import type { Props } from './types'
 
 function PostForm({ error, fields, method = 'post', ...props }: Props) {
@@ -32,12 +33,9 @@ function PostForm({ error, fields, method = 'post', ...props }: Props) {
         )}
       </div>
       {error?.formError && <p className="text-red-500">{error.formError}</p>}
-      <button
-        type="submit"
-        className="transparent rounded py-4 px-6 font-bold text-blue-700 transition hover:bg-gray-100"
-      >
+      <Button type="submit" className="border border-blue-500">
         Create Post
-      </button>
+      </Button>
     </form>
   )
 }
