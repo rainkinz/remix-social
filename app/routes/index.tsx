@@ -2,13 +2,12 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useActionData, useLoaderData } from '@remix-run/react'
 import { getPosts, createPost } from '~/services/posts.server'
-import type { Post } from '~/services/posts.server'
 import { Post as PostComponent } from '~/components/Post'
 import { PostForm } from '~/components/PostForm'
 import { CreatePost } from '~/services/validations'
 
 type LoaderData = {
-  posts: Post[]
+  posts: Awaited<ReturnType<typeof getPosts>>
 }
 
 type ActionData = {
@@ -75,7 +74,9 @@ export default function Index() {
       <ul>
         {posts.map((post) => (
           <li key={post.title}>
-            <PostComponent header={post.title}>{post.body}</PostComponent>
+            <PostComponent header={post.title} authorName={'Brendan'}>
+              {post.body}
+            </PostComponent>
           </li>
         ))}
       </ul>

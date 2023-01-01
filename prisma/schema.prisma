@@ -29,6 +29,6 @@ model Post {
 
   title         String
   body          String
-  authorId      String 
+  authorId      String @default("dc2f0672-cce7-4a2d-a80b-464b8089f3ad")
   author        User @relation(fields: [authorId], references: [id])
 }
