@@ -1,12 +1,6 @@
-import type { ComponentPropsWithoutRef } from 'react'
 import type { Props } from './types'
 
-function PostForm({
-  error = {},
-  method = 'post',
-  fields = { title: '', body: '' },
-  ...props
-}: Props & ComponentPropsWithoutRef<'form'>) {
+function PostForm({ error, fields, method = 'post', ...props }: Props) {
   return (
     <form className="flex flex-col gap-4 " method={method} {...props}>
       <div className="mb-4 flex flex-col">
@@ -37,7 +31,7 @@ function PostForm({
           <p className="text-red-500">{error.fieldErrors.body}</p>
         )}
       </div>
-      {error.formError && <p className="text-red-500">{error.formError}</p>}
+      {error?.formError && <p className="text-red-500">{error.formError}</p>}
       <button
         type="submit"
         className="transparent rounded py-4 px-6 font-bold text-blue-700 transition hover:bg-gray-100"

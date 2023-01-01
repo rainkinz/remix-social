@@ -1,12 +1,14 @@
-export type Props = {
-  error: {
+import type { ComponentPropsWithoutRef } from 'react'
+
+export type Props = ComponentPropsWithoutRef<'form'> & {
+  error?: {
     formError?: string[]
     fieldErrors?: {
-      title: string[]
-      body: string[]
+      title?: string[]
+      body?: string[]
     }
   }
-  fields: {
+  fields?: {
     title: string
     body: string
   }

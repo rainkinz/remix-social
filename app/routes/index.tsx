@@ -5,17 +5,18 @@ import { getPosts, createPost } from '~/services/posts.server'
 import type { Post } from '~/services/posts.server'
 import { Post as PostComponent } from '~/components/Post'
 import { PostForm } from '~/components/PostForm'
+import { CreatePost } from '~/services/validations'
 
 type LoaderData = {
   posts: Post[]
 }
 
 type ActionData = {
-  error: {
-    formError: string[]
-    fieldErrors: {
-      title: string[]
-      body: string
+  error?: {
+    formError?: string[]
+    fieldErrors?: {
+      title?: string[]
+      body?: string[]
     }
   }
   fields: {
@@ -28,8 +29,27 @@ export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()
   const rawTitle = form.get('title') || ''
   const rawBody = form.get('body') || ''
+  const result = CreatePost.safeParse({ title: rawTitle, body: rawBody })
 
-  const post = await createPost({ title: rawTitle, body: rawBody })
+  if (!result.success) {
+    return json(
+      {
+        error: result.error.flatten(),
+        fields: {
+          title: rawTitle,
+          body: rawBody,
+        },
+      },
+      {
+        status: 400,
+      }
+    )
+  }
+
+  await createPost({
+    title: result.data.title,
+    body: result.data.body,
+  })
 
   return redirect('/')
 }
@@ -41,12 +61,17 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const { posts } = useLoaderData<LoaderData>()
-  const data = useActionData<ActionData>()
+  const formData = useActionData<ActionData>()
 
   return (
     <div className="flex flex-col items-center">
       <h1>Welcome to Remix</h1>
-      <PostForm method="post" action="/?index" {...data} />
+      <PostForm
+        method="post"
+        action="/?index"
+        error={formData?.error}
+        fields={formData?.fields}
+      />
       <ul>
         {posts.map((post) => (
           <li key={post.title}>
