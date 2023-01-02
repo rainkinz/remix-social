@@ -1,7 +1,8 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { Outlet, useLoaderData } from '@remix-run/react'
 import { Nav } from '~/components/Nav'
-import { authenticator, SessionUser } from '~/services/auth.server'
+import { authenticator } from '~/services/auth.server'
+import type { SessionUser } from '~/services/auth.server'
 
 type LoaderData = {
   user: SessionUser

@@ -26,6 +26,10 @@ type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  })
+
   const form = await request.formData()
   const rawTitle = form.get('title') || ''
   const rawBody = form.get('body') || ''
@@ -49,6 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
   await createPost({
     title: result.data.title,
     body: result.data.body,
+    authorId: user.id,
   })
 
   return redirect('/')
@@ -79,7 +84,7 @@ export default function Index() {
       <ul>
         {posts.map((post) => (
           <li key={post.title}>
-            <PostComponent header={post.title} authorName={'Brendan'}>
+            <PostComponent header={post.title} authorName={post.author.email}>
               {post.body}
             </PostComponent>
           </li>
