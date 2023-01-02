@@ -11,10 +11,14 @@ export const getPosts = () =>
     },
   })
 
-export const createPost = ({ title, body }: Pick<Post, 'title' | 'body'>) => {
+export const createPost = ({
+  title,
+  body,
+  authorId,
+}: Pick<Post, 'title' | 'body' | 'authorId'>) => {
   return db.post.create({
     data: {
-      authorId: 'dc2f0672-cce7-4a2d-a80b-464b8089f3ad',
+      authorId,
       title,
       body,
     },

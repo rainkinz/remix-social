@@ -5,6 +5,7 @@ import { getPosts, createPost } from '~/services/posts.server'
 import { Post as PostComponent } from '~/components/Post'
 import { PostForm } from '~/components/PostForm'
 import { CreatePost } from '~/services/validations'
+import { authenticator } from '~/services/auth.server'
 
 type LoaderData = {
   posts: Awaited<ReturnType<typeof getPosts>>
@@ -25,6 +26,10 @@ type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const user = await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  })
+
   const form = await request.formData()
   const rawTitle = form.get('title') || ''
   const rawBody = form.get('body') || ''
@@ -48,12 +53,17 @@ export const action: ActionFunction = async ({ request }) => {
   await createPost({
     title: result.data.title,
     body: result.data.body,
+    authorId: user.id,
   })
 
   return redirect('/')
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  await authenticator.isAuthenticated(request, {
+    failureRedirect: '/login',
+  })
+
   const data: LoaderData = { posts: await getPosts() }
   return json(data)
 }
@@ -63,18 +73,17 @@ export default function Index() {
   const formData = useActionData<ActionData>()
 
   return (
-    <div className="flex flex-col items-center">
-      <h1>Welcome to Remix</h1>
+    <div className="m-8 flex w-full flex-col items-center gap-8">
       <PostForm
         method="post"
         action="/?index"
         error={formData?.error}
         fields={formData?.fields}
       />
-      <ul>
+      <ul className="flex w-full flex-col gap-4">
         {posts.map((post) => (
           <li key={post.title}>
-            <PostComponent header={post.title} authorName={'Brendan'}>
+            <PostComponent header={post.title} authorName={post.author.email}>
               {post.body}
             </PostComponent>
           </li>
