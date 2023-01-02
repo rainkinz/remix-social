@@ -16,7 +16,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function App() {
   const { user } = useLoaderData<LoaderData>()
   return (
-    <div className="mx-4 max-w-6xl md:mx-10">
+    <div className="flex flex-col items-center md:mx-10">
       <Nav user={user} />
       <Outlet />
     </div>

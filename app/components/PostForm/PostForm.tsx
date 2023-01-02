@@ -3,7 +3,7 @@ import type { Props } from './types'
 
 function PostForm({ error, fields, method = 'post', ...props }: Props) {
   return (
-    <form className="flex flex-col gap-4" method={method} {...props}>
+    <form className="flex w-full flex-col gap-4" method={method} {...props}>
       <div className="flex flex-col">
         <label htmlFor="title" className="mb-2 text-gray-600">
           Title
@@ -33,7 +33,7 @@ function PostForm({ error, fields, method = 'post', ...props }: Props) {
         )}
       </div>
       {error?.formError && <p className="text-red-500">{error.formError}</p>}
-      <Button type="submit" className="border border-blue-500">
+      <Button type="submit" className="w-64 border border-blue-500">
         Create Post
       </Button>
     </form>

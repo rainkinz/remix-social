@@ -73,14 +73,14 @@ export default function Index() {
   const formData = useActionData<ActionData>()
 
   return (
-    <div className="m-8 flex flex-col items-center gap-8">
+    <div className="m-8 flex w-full flex-col items-center gap-8">
       <PostForm
         method="post"
         action="/?index"
         error={formData?.error}
         fields={formData?.fields}
       />
-      <ul className="flex flex-col gap-4">
+      <ul className="flex w-full flex-col gap-4">
         {posts.map((post) => (
           <li key={post.title}>
             <PostComponent header={post.title} authorName={post.author.email}>

@@ -4,7 +4,7 @@ import { Button } from '../Button'
 
 function Nav({ user }: { user?: SessionUser }) {
   return (
-    <nav className="mb-10 flex items-center justify-between">
+    <nav className="mb-10 flex w-full items-center justify-between">
       <Link to="/">
         <h1 className="text-2xl text-slate-800">Remix Social</h1>
       </Link>
