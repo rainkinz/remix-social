@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react'
-import { SessionUser } from '~/services/auth.server'
+import type { SessionUser } from '~/services/auth.server'
 import { Button } from '../Button'
 
 function Nav({ user }: { user?: SessionUser }) {
@@ -8,11 +8,16 @@ function Nav({ user }: { user?: SessionUser }) {
       <Link to="/">
         <h1 className="text-2xl text-slate-800">Remix Social</h1>
       </Link>
-      <ul className="flex">
+      <ul className="flex items-center">
         {user ? (
           <>
             <li className="flex">
               <p className="text-slate-600">{user.email}</p>
+            </li>
+            <li className="ml-2 flex">
+              <form method="post" action="/logout">
+                <Button>Log out</Button>
+              </form>
             </li>
           </>
         ) : (
